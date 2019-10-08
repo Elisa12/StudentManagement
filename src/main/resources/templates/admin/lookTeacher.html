@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>搜索查看教师信息-管理员</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{admin/index::adm_head}"></div>
+    <div th:replace="~{admin/index::adm_left}"></div>
+
+
+    <div class="layui-body">
+        <div class="layui-main">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>按条件进行搜索</legend>
+            </fieldset>
+
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-block">
+                        <input type="tel" name="teaId" lay-verify="teaId" autocomplete="off"
+                               placeholder="请输入编号"
+                               class="layui-input" id="teaId">
+                    </div>
+
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="name" autocomplete="off" class="layui-input"
+                               placeholder="请输入姓名" id="name">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block" id="sex">
+                        <input type="radio" name="sex" value="男" title="男"/>
+                        <input type="radio" name="sex" value="女" title="女"/>
+                        <input type="radio" name="sex" title="无条件" checked/>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职称</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="proTitle" value="教授" title="教授"/>
+                        <input type="radio" name="proTitle" value="副教授" title="副教授"/>
+                        <input type="radio" name="proTitle" value="讲师" title="讲师"/>
+                        <input type="radio" name="proTitle" value="助教" title="助教"/>
+                        <input type="radio" name="proTitle" title="无条件" checked/>
+
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属专业</label>
+                    <div class="layui-input-inline">
+                        <select name="collId" id="collInfo" lay-filter="collInfo"
+                                lay-verify="collInfo">
+
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="proId" lay-filter="proInfo" id="proInfo"
+                                lay-verify="proInfo">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="submit">搜索</button>
+                        <button type="button" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-main">
+            <table class="layui-hiden" id="teaInfo" lay-filter="teaInfo">
+
+            </table>
+            <script type="text/html" id="toolbarDemo">
+                <label>教师信息表</label>
+            </script>
+            <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            </script>
+        </div>
+
+    </div>
+
+
+    <div th:replace="~{admin/index::foot}"></div>
+</div>
+</body>
+</html>
+<script>
+    layui.use(['jquery','element','form','table'],function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+        $("#resetButton").click(function () {
+           location.reload();
+        });
+        /*三级联动下拉框渲染开始*/
+        var allProInfo, allCollInfo;
+        var parId = 2;
+        /*加载页面时直接发送ajax请求，将所有学院，专业，班级信息拉取过来，并将默认值渲染好*/
+        $.ajax({
+            url: "/com/allClassInfo",
+            type: "get",
+            async: false,
+            success: function (result) {
+                allProInfo = result.data.allProInfo;
+                allCollInfo = result.data.allCollInfo;
+                var collOption = "<option value= '0'>请选择</option>";
+                $.each(allCollInfo, function (index, item) {
+                    collOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+                });
+                $("#collInfo").html(collOption);
+                form.render();
+            }
+
+        });
+        /*初步渲染完成*/
+        /*以下代码完成三级联动下拉框*/
+        form.on('select(collInfo)', function (data) {
+            parId = data.value;
+            updateProAndClassInfo(parId);
+        });
+
+        function updateProAndClassInfo(parId) {
+            var proOption = "<option value= '0'>请选择</option>";
+            $.each(allProInfo, function (index, item) {
+                if (item.parId == parId)
+                    proOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+
+            });
+            $("#proInfo").html(proOption);
+            form.render();
+        }
+
+        form.on("submit(submit)", function (data) {
+            table.render({
+                elem: '#teaInfo'
+                , toolbar: '#toolbarDemo'
+                , id: 'teaInfo'
+                , url: '/adm/teachers'
+                , title: '教师信息表'
+                , totalRow: true
+                , align: 'center'
+                , cols: [
+                    [
+                        {field: 'teaId', title: '编号', align: 'center'}
+                        , {field: 'name', title: '姓名', align: 'center'}
+                        , {field: 'sex', title: '性别', align: 'center'}
+                        , {field: 'proTitle', title: '职称', align: 'center'}
+                        , {field: 'collName', title: '所属学院', align: 'center'}
+                        , {field: 'proName', title: '所属专业', align: 'center'}
+                        , {field: 'cardId', title: '身份证号', align: 'center'}
+                        , {field:'year',title:'入职年份',align:'center'}
+                        , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+                    ]
+                ]
+                , page: true
+                , response: {
+                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                }
+                , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "count": res.data.allTeacher.total, //解析数据长度
+                        "data": res.data.allTeacher.list //解析数据列表
+                    };
+                },
+                where: {
+                    teaId: data.field.teaId,
+                    name: data.field.name,
+                    collId: data.field.collId,
+                    proId: data.field.proId,
+                    sex: data.field.sex,
+                    proTitle: data.field.proTitle
+                },
+                page: {
+                    curr: 1
+                }
+            });
+            return false;
+        });
+
+        table.on('tool(teaInfo)', function (obj) {
+            var data = obj.data;
+            $.ajax({
+                url: "/adm/setEditTeacherInfo",
+                type: "post",
+                data: data
+            });
+            layer.open({
+                type: 2,
+                title: '修改教师s信息',
+                btn: ['关闭'],
+                shadeClose: true,
+                shade: 0.5,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['1200px', '900px'],
+                content: '/adm/editTeacher',
+                end: function () {
+                    $(window.parent.document).find('.layui-laypage-btn').click();
+                }
+            });
+        });
+
+    })
+</script>

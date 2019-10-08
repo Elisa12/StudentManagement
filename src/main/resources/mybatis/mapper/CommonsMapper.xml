@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.CommonsMapper">
+    <select id="haveStudent" resultType="java.lang.Integer">
+        select count(*) from tbl_stu
+        <where>
+            and `stu_id` = #{id}
+        </where>
+    </select>
+    <select id="getAllCollInfo" resultType="com.liu.pojo.CollOrProInfo">
+            SELECT `name`,`val_id`,`par_id`
+            from `tbl_dic_2016`
+            <where>
+                and `type` = "col"
+            </where>
+
+    </select>
+
+    <select id="getAllProInfo" resultType="com.liu.pojo.CollOrProInfo">
+        SELECT `name`,`val_id`,`par_id`,`cla_num`
+        from `tbl_dic_2016`
+        <where>
+            and `type` = "pro"
+        </where>
+    </select>
+
+    <select id="haveTeacher" resultType="java.lang.Integer">
+        select count(*) from tbl_tea
+        <where>
+            and `tea_id` = #{id}
+        </where>
+    </select>
+
+
+</mapper>

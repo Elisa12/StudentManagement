@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>添加学生信息-管理员</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+</head>
+
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{admin/index::adm_head}"></div>
+    <div th:replace="~{admin/index::adm_left}"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-main">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend>录入学生信息</legend>
+            </fieldset>
+            <form class="layui-form" action="" id="studentInfo">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">学号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="stuId" lay-verify="stuId" autocomplete="off"
+                               placeholder="请输入学生学号"
+                               class="layui-input" id="stuId">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入学生姓名"
+                               class="layui-input" id="name">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="sex" value="男" title="男" checked="">
+                        <input type="radio" name="sex" value="女" title="女">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属班级</label>
+                    <div class="layui-input-inline">
+                        <select name="collId" id="collInfo" lay-filter="collInfo"
+                                lay-verify="collInfo">
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="proId" lay-filter="proInfo" id="proInfo"
+                                lay-verify="proInfo">
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="claId" id="claInfo" lay-filter="claInfo" lay-verify="claInfo">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">政治面貌</label>
+                    <input type="radio" name="politicalStatus" value="群众" title="群众" />
+                    <input type="radio" name="politicalStatus" value="共青团员" title="共青团员" checked/>
+                    <input type="radio" name="politicalStatus" value="共产党员" title="共产党员"/>
+
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">身份证号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cardId" lay-verify="cardId" autocomplete="off"
+                               placeholder="请输入学生身份证号"
+                               class="layui-input" id="cardId">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">家庭住址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="address" lay-verify="address" autocomplete="off"
+                               placeholder="请输入学生家庭住址"
+                               class="layui-input" id="address">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">银行卡号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="bankCard" lay-verify="bankCard" autocomplete="off"
+                               placeholder="请输入学生银行卡号"
+                               class="layui-input" id="bankCard">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                        <button type="button" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div th:replace="~{admin/index::foot}"></div>
+</div>
+
+</body>
+</html>
+<script>
+    layui.use(['jquery', 'form','layer'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            layer = layui.layer;
+        /*三级联动下拉框渲染开始*/
+        var allProInfo,allCollInfo;
+        var parId = 2,valId = 1;
+        /*加载页面时直接发送ajax请求，将所有学院，专业，班级信息拉取过来，并将默认值渲染好*/
+        $.ajax({
+            url: "/com/allClassInfo",
+            type: "get",
+            async: false,
+            success: function (result) {
+                allProInfo = result.data.allProInfo;
+                allCollInfo = result.data.allCollInfo;
+                var collOption;
+                $.each(allCollInfo,function (index,item) {
+                    collOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+                });
+                $("#collInfo").html(collOption);
+                updateProAndClassInfo(parId,valId);
+            }
+
+        });
+        /*初步渲染完成*/
+        /*以下代码完成三级联动下拉框*/
+        form.on('select(collInfo)',function (data) {
+            parId = data.value;
+            updateProAndClassInfo(parId,valId);
+        });
+        form.on('select(proInfo)',function (data) {
+            valId=data.value;
+            updataClassInfo(parId,valId);
+
+        });
+        function updateProAndClassInfo(parId,valId) {
+            var proOption,claOption;
+            $.each(allProInfo,function (index,item) {
+                if(item.parId == parId) {
+                    proOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+                    if(item.valId == valId) {
+                        for(var i = 1;i<=item.claNum;i++) {
+                            claOption += "<option value=" + i + ">" + i + "班</option>";
+                        }
+                    }
+                }
+            });
+            $("#proInfo").html(proOption);
+            $("#claInfo").html(claOption);
+            form.render();
+        }
+        function updataClassInfo(parId,valId) {
+            var claOption;
+            $.each(allProInfo,function (index,item) {
+                if(item.parId == parId) {
+                    if(item.valId == valId) {
+                        for(var i = 1;i<=item.claNum;i++) {
+                            claOption += "<option value=" + i + ">" + i + "班</option>";
+                        }
+                    }
+                }
+            });
+            $("#claInfo").html(claOption);
+            form.render();
+        }
+
+        /*自定义验证规则*/
+        form.verify({
+            stuId: function (value, item) {
+                var reg = /^\d{11}$/;
+                var msg = '';
+                if (!reg.test(value)) {
+                    msg = '学号必须是11位数字，请检查重新输入';
+                    return msg;
+                }
+                $.ajax({
+                    url: "/com/students/" + value,
+                    type: "get",
+                    async: false,
+                    success: function (result) {
+                        if (result == 1) {
+                            msg = '该学生已经被录入到数据库了,请检查重新输入';
+                        }
+                    }
+                });
+                return msg;
+            },
+            name: [/[\u2E80-\u9FFF]{2,4}/, '姓名必须为2-4位中文字符，请检查重新输入'],
+            cardId: [/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, '身份证号输入有误，请检查重新输入'],
+            address:function (value,item) {
+                if(value == "") {
+                    return "家庭地址不能为空，请重新输入";
+                }
+            }
+        });
+        /*自定义验证规则，END===============*/
+        /*表单提交监听*/
+        form.on('submit(submit)', function (data) {
+            $.ajax({
+                url: "/adm/students",
+                type: "post",
+                data: data.field,
+                success: function (result) {
+                    if (result.code == 200) {
+                        layer.msg('录入成功');
+                    }
+                }
+            });
+            $("#name").val('');
+            $("#cardId").val('');
+            $("#address").val('');
+            $("#bankCard").val('');
+            return false;
+        });
+        /*表单提交监听END==========================*/
+    });
+</script>
+
+
+
+

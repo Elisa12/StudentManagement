@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.TeacherMapper">
+    <sql id="teaInfo">
+            tea.`tea_id`,tea.`name`,tea.`sex`,dic1.`name` collName ,dic2.`name` proName,tea.`pro_title`,tea.`year`,tea.`card_id`
+    </sql>
+    <sql id="teaClass">
+cla.`name` className,teaClass.`year`,dic1.`name` collName,dic2.`name` proName,teaClass.`cla_id`,teaClass.`stu_year`
+    </sql>
+    <select id="getTeaInfoById" resultType="com.liu.pojo.TeacherInfo">
+        select
+        <include refid="teaInfo"></include>
+        from `tbl_tea` tea
+        LEFT JOIN `tbl_dic_2016` dic1 ON tea.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON tea.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` =
+        dic1.`val_id`
+        WHERE `tea_id`=#{id}
+
+    </select>
+
+    <select id="getTeaClassById" resultType="com.liu.pojo.TeaClass">
+        select <include refid="teaClass"></include>
+        from `tbl_tea_class` teaClass
+        LEFT JOIN `tbl_dic_2016` dic1 ON teaClass.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON teaClass.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        LEFT JOIN `tbl_class` cla ON teaClass.`class_id` = cla.`id`
+        WHERE teaClass.`tea_id` = #{id}
+    </select>
+</mapper>

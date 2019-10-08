@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+</head>
+<body>
+<div class="layui-main">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>重新编辑学生信息</legend>
+    </fieldset>
+
+    <form class="layui-form" action="" id="studentInfo" lay-filter="studentInfo">
+        <div class="layui-form-item">
+            <label class="layui-form-label">学号</label>
+            <div class="layui-input-block">
+                <input type="text" name="stuId" lay-verify="stuId" autocomplete="off"
+                       class="layui-input" id="stuId" disabled th:value="${session.editStudentInfo.stuId}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">姓名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入学生姓名"
+                       class="layui-input" th:value="${session.editStudentInfo.name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="男" title="男" th:checked="${session.editStudentInfo.sex eq '男'}"/>
+                <input type="radio" name="sex" value="女" title="女" th:checked="${session.editStudentInfo.sex eq '女'}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">年级</label>
+            <div class="layui-input-block">
+                <select name="year" id="year" lay-filter="year" lay-verify="year">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属班级</label>
+            <div class="layui-input-inline">
+                <select name="collId" id="collInfo" lay-filter="collInfo" lay-verify="collInfo">
+
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="proId" lay-filter="proInfo" id="proInfo"
+                        lay-verify="proInfo">
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="claId" id="claInfo" lay-filter="claInfo" lay-verify="claInfo" th:id="claInfo">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">政治面貌</label>
+            <input type="radio" name="politicalStatus" value="群众" title="群众" th:checked="${session.editStudentInfo.politicalStatus eq '群众'}"/>
+            <input type="radio" name="politicalStatus" value="共青团员" title="共青团员" th:checked="${session.editStudentInfo.politicalStatus eq '共青团员'}"/>
+            <input type="radio" name="politicalStatus" value="共产党员" title="共产党员" th:checked="${session.editStudentInfo.politicalStatus eq '共产党员'}"/>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号</label>
+            <div class="layui-input-block">
+                <input type="text" name="cardId" lay-verify="cardId" autocomplete="off" placeholder="请输入学生身份证号"
+                       class="layui-input" th:value="${session.editStudentInfo.cardId}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">家庭住址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" lay-verify="address" autocomplete="off"
+                       placeholder="请输入学生家庭住址"
+                       class="layui-input" id="address" th:value="${session.editStudentInfo.address}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">银行卡号</label>
+            <div class="layui-input-block">
+                <input type="text" name="bankCard" lay-verify="bankCard" autocomplete="off"
+                       placeholder="请输入学生银行卡号"
+                       class="layui-input" id="bankCard" th:value="${session.editStudentInfo.bankCard}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    layui.use(['form', 'jquery','layer'], function () {
+        var form = layui.form;
+        var $ = layui.$;
+        var layer = layui.layer;
+
+        $("#resetButton").click(function () {
+            location.reload();
+        });
+        var studentInfo;
+        var allProInfo,allCollInfo;
+        var parId,valId;
+        $.ajax({
+           url:"/adm/getEditStudentInfo" ,
+            type:"get",
+            async:false,
+            success: function (result) {
+                studentInfo = result.studentInfo;
+                var yearInfo = Number(studentInfo.year);
+                var comYear = Number(studentInfo.comYear);
+                var yearOption;
+
+                for(var i=comYear;i<=comYear+5;i++) {
+                    if(i == yearInfo) {
+                        yearOption += "<option value=" + i + " selected>" + i + "届</option>";
+                    } else yearOption += "<option value=" + i + ">" + i + "届</option>";
+                }
+                $("#year").html(yearOption);
+                form.render();
+            }
+        });
+        $.ajax({
+            url: "/com/allClassInfo",
+            type: "get",
+            async: false,
+            success: function (result) {
+                allProInfo = result.data.allProInfo;
+                allCollInfo = result.data.allCollInfo;
+                var collOption;
+                var proOption;
+                var claOption;
+                $.each(allCollInfo,function (index,item) {
+                    if(studentInfo.collName == item.name) {
+                        collOption += "<option value=" + item.valId + " selected>" + item.name + "</option>";
+                        parId = item.valId;
+                    } else {
+                        collOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+                    }
+                });
+                $.each(allProInfo,function (index,item) {
+                    if(item.parId == parId) {
+                        if(studentInfo.proName == item.name) {
+                            proOption += "<option value=" + item.valId + " selected>" + item.name + "</option>";
+                            valId = item.valId;
+                            for(var i = 1;i<=item.claNum;i++) {
+                                if(studentInfo.claId == i)
+                                    claOption += "<option value=" + i + " selected>" + i + "班</option>";
+                                else claOption += "<option value=" + i + ">" + i + "班</option>";
+                            }
+                        } else proOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+
+                    }
+                });
+                $("#collInfo").html(collOption);
+                $("#proInfo").html(proOption);
+                $("#claInfo").html(claOption);
+                form.render();
+            }
+        });
+        /*以下代码完成三级联动下拉框*/
+        form.on('select(collInfo)',function (data) {
+            parId = data.value;
+            updateProAndClassInfo(parId,valId);
+        });
+        form.on('select(proInfo)',function (data) {
+            valId = data.value;
+            updataClassInfo(parId,valId);
+
+        });
+        function updateProAndClassInfo(parId,valId) {
+            var proOption,claOption;
+            $.each(allProInfo,function (index,item) {
+                if(item.parId == parId) {
+                    proOption += "<option value=" + item.valId + ">" + item.name + "</option>";
+                    if(item.valId == valId) {
+                        for(var i = 1;i<=item.claNum;i++) {
+                            claOption += "<option value=" + i + ">" + i + "班</option>";
+                        }
+                    }
+                }
+            });
+            $("#proInfo").html(proOption);
+            $("#claInfo").html(claOption);
+            form.render();
+        }
+        function updataClassInfo(parId,valId) {
+            var claOption;
+            $.each(allProInfo,function (index,item) {
+                if(item.parId == parId) {
+                    if(item.valId == valId) {
+                        for(var i = 1;i<=item.claNum;i++) {
+                            claOption += "<option value=" + i + ">" + i + "班</option>";
+                        }
+                    }
+                }
+            });
+            $("#claInfo").html(claOption);
+            form.render();
+        }
+
+        /*动态渲染下拉选择框END===============================*/
+        form.verify({
+            name: [/^[\u2E80-\u9FFF]{2,4}$/, '姓名必须为2-4位中文字符，请检查重新输入'],
+            cardId: [/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, '身份证号输入有误，请检查重新输入']
+        });
+        /*自定义验证规则，END===============*/
+        form.on('submit(submit)', function (data) {
+            $.ajax({
+                url: "/adm/students",
+                type: "put",
+                data: data.field,
+                success:function (result) {
+                    if(result.code == 200) {
+                        layer.msg("修改成功");
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>

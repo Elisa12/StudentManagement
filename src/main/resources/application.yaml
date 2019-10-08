@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    password: root
+    username: root
+    url: jdbc:mysql:///student_management?serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    cache: false
+mybatis:
+  config-location: classpath:/mybatis/mybatis_config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+#logging:
+#  level:
+#    com.liu.mapper: debug

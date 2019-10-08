@@ -1,0 +1,80 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>学生信息管理-登录</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+    <style type="text/css">
+        .login-form {
+            margin-top: 200px;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-main login-form">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>登录</legend>
+    </fieldset>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" lay-verify="id" autocomplete="off" placeholder="输入学号或者工号"
+                       class="layui-input" id="studentId">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" lay-verify="password" autocomplete="off"
+                       placeholder="请输入密码（默认为身份证后6位）"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="submit">立即登录</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="resetButton">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script th:inline="javascript">
+    layui.use(['jquery', 'form', 'layer'], function () {
+        var form = layui.form,
+            $ = layui.$,
+            layer = layui.layer;
+        form.verify({
+            id: function (value, item) {
+                var reg = /^\d{11}$/;
+                var reg1 = /^[A-Za-z0-9]{4,40}$/;
+                if (!reg.test(value)&&!reg1.test(value))
+                    return '账号信息输入有误，请检查重新输入';
+            },
+            password: function (value, item) {
+                if (value == null || value == '') {
+                    return '密码不能为空，请检查重新输入';
+                }
+            }
+        });
+        form.on('submit(submit)', function (data) {
+            $.ajax({
+                url: "/login",
+                type: "post",
+                data: data.field,
+                success: function (result) {
+                    if(result.code == 100) {
+                        layer.msg('登录失败，请检查账号或密码');
+                    }
+                    else {
+                       window.location.replace("/goView");
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</html>
+

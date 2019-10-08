@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.AdminMapper">
+    <sql id="studentInfo">
+        stu.`stu_id`,stu.`name`,stu.`sex`,stu.`com_year`,stu.`year`,
+        dic1.`name` collName ,dic2.`name` proName,
+        stu.`cla_id`,stu.`card_id`,stu.`address`,stu.`political_status`,stu.`bank_card`
+    </sql>
+    <sql id="teacherInfo">
+        tea.`tea_id`,tea.`name`,tea.`sex`,dic1.`name` collName,dic2.`name` proName,tea.`pro_title`,tea.`year`,tea.`card_id`
+    </sql>
+    <insert id="addStudent">
+        insert into tbl_stu(stu_id,name,sex,coll_id,pro_id,cla_id,card_id,password,com_year,year,address,political_status,bank_card)
+        values(#{stuId},#{name},#{sex},#{collId},#{proId},#{claId},#{cardId},#{password},#{comYear},#{year},#{address},#{politicalStatus},#{bankCard})
+    </insert>
+
+    <select id="getStudentByConditions" resultType="com.liu.pojo.StudentInfo">
+        select <include refid="studentInfo" />
+        from `tbl_stu` stu
+        LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        <where>
+            <if test="stuId != ''">
+                and stu.`stu_id` = #{stuId}
+            </if>
+            <if test="name != ''">
+            <bind name="stuName" value="'%'+name+'%'"/>
+                AND stu.`name` like #{stuName}
+            </if>
+            <if test="collId != 0">
+                and dic1.`val_id` = #{collId}
+            </if>
+            <if test="proId != 0 and proId != null">
+                and dic2.`val_id` = #{proId}
+            </if>
+            <if test="claId != 0 and claId != null">
+                and stu.`cla_id` = #{claId}
+            </if>
+            <if test="sex != 'on'">
+                and stu.`sex` = #{sex}
+            </if>
+            <if test="politicalStatus != 'on'">
+                and stu.`political_status` = #{politicalStatus}
+            </if>
+        </where>
+
+    </select>
+
+    <update id="editStudent">
+        UPDATE `tbl_stu` set
+        `name` = #{name},
+        `sex` = #{sex},
+        `coll_id` = #{collId},
+        `pro_id` = #{proId},
+        `cla_id` = #{claId},
+        `card_id` = #{cardId},
+        `year` = #{year},
+        `address` = #{address},
+        `political_status` = #{politicalStatus},
+        `bank_card` = #{bankCard}
+        where `stu_id` = #{stuId}
+
+    </update>
+
+    <select id="getTeacherByConditions" resultType="com.liu.pojo.TeacherInfo">
+        select <include refid="teacherInfo"></include>
+        from `tbl_tea` tea
+        LEFT JOIN `tbl_dic_2016` dic1 ON tea.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON tea.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        <where>
+            <if test="teaId != ''">
+                and tea.`tea_id` = #{teaId}
+            </if>
+            <if test="name != ''">
+                <bind name="teaName" value="'%'+name+'%'"/>
+                AND tea.`name` like #{teaName}
+            </if>
+            <if test="collId != 0">
+                and dic1.`val_id` = #{collId}
+            </if>
+            <if test="proId != 0 and proId != null">
+                and dic2.`val_id` = #{proId}
+            </if>
+            <if test="sex != 'on'">
+                and tea.`sex` = #{sex}
+            </if>
+            <if test="proTitle != 'on'">
+                and tea.`pro_title` = #{proTitle}
+            </if>
+        </where>
+    </select>
+
+    <insert id="addTeacher">
+        insert into tbl_tea(tea_id,name,sex,coll_id,pro_id,card_id,password,year,pro_title)
+        values(#{teaId},#{name},#{sex},#{collId},#{proId},#{cardId},#{password},#{year},#{proTitle})
+    </insert>
+
+    <update id="editTeacher">
+        UPDATE `tbl_tea` set
+        `name` = #{name},
+        `sex` = #{sex},
+        `coll_id` = #{collId},
+        `pro_id` = #{proId},
+        `card_id` = #{cardId},
+        `pro_title` = #{proTitle}
+        where `tea_id` = #{teaId}
+    </update>
+
+</mapper>
