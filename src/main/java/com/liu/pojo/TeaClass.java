@@ -14,7 +14,7 @@ public class TeaClass {
     private String year;
     private String collName;
     private String proName;
-    private String claId;
+    private int claId;
     private String stuYear;
-
+    private int classId;
 }
