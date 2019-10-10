@@ -10,7 +10,7 @@ import java.util.List;
 public interface AdminService {
     Integer addStudent(Student student);
 
-    Integer editStudent(Student student);
+    void editStudent(Student student);
 
     List<StudentInfo> getStudentByConditions(Student student);
 
@@ -18,5 +18,5 @@ public interface AdminService {
 
     Integer addTeacher(Teacher teacher);
 
-    Integer editTeacher(Teacher teacher);
+    void editTeacher(Teacher teacher);
 }

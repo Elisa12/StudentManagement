@@ -22,9 +22,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer editStudent(Student student) {
-        Integer integer = adminMapper.editStudent(student);
-        return integer;
+    public void editStudent(Student student) {
+        adminMapper.editStudent(student);
     }
 
     @Override
@@ -46,8 +45,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer editTeacher(Teacher teacher) {
-        Integer integer = adminMapper.editTeacher(teacher);
-        return integer;
+    public void editTeacher(Teacher teacher) {
+        adminMapper.editTeacher(teacher);
     }
 }

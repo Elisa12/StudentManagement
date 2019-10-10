@@ -43,6 +43,10 @@ public class AdminController {
     public String goAddStudent() {
         return "admin/addStudent";
     }
+    @GetMapping("/editTeacher")
+    public String goEditTeacher(){
+        return "admin/editTeacher";
+    }
 
 
 
@@ -86,11 +90,8 @@ public class AdminController {
     @PutMapping("/students")
     @ResponseBody
     public AjaxResponse editStudent(Student student) {
-        Integer integer = adminService.editStudent(student);
-        if(integer == 1) {
-            return AjaxResponse.builder().code(200).build();
-        }
-        else return AjaxResponse.builder().code(100).build();
+        adminService.editStudent(student);
+        return AjaxResponse.builder().code(200).build();
     }
 
     @GetMapping("/teachers")
@@ -127,18 +128,13 @@ public class AdminController {
         TeacherInfo editTeacherInfo = (TeacherInfo) session.getAttribute("editTeacherInfo");
         return AjaxResponse.builder().code(200).teacherInfo(editTeacherInfo).build();
     }
-    @GetMapping("/editTeacher")
-    public String goEditTeacher(){
-        return "redirect:/adm_editTeacher.html";
-    }
+
 
     @PutMapping("/teachers")
     @ResponseBody
     public AjaxResponse editTeacher(Teacher teacher) {
-        Integer integer = adminService.editTeacher(teacher);
-        if(integer == 1) {
-            return AjaxResponse.builder().code(200).build();
-        }
-        else return AjaxResponse.builder().code(100).build();
+        adminService.editTeacher(teacher);
+        return AjaxResponse.builder().code(200).build();
+
     }
 }

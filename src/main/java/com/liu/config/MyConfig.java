@@ -1,8 +1,13 @@
 package com.liu.config;
 
 
+import com.liu.interceptor.AdminInterceptor;
+import com.liu.interceptor.LoginInterceptor;
+import com.liu.interceptor.StudentInterceptor;
+import com.liu.interceptor.TeacherInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
@@ -17,11 +22,7 @@ public class MyConfig implements WebMvcConfigurer {
                registry.addViewController("/stu_index.html").setViewName("student/index");
                registry.addViewController("/tea_index.html").setViewName("teacher/index");
             }
-
-
-
-
-           /*@Override
+           @Override
             public void addInterceptors(InterceptorRegistry registry) {
                 String loginExcludes [] = {
                         "/","/index.html","/login","/goView","/error","/com/**"
@@ -40,7 +41,7 @@ public class MyConfig implements WebMvcConfigurer {
                 registry.addInterceptor(new TeacherInterceptor()).addPathPatterns("/**").excludePathPatterns(teaExcludes);
                 registry.addInterceptor(new StudentInterceptor()).addPathPatterns("/**").excludePathPatterns(stuExcludes);
 
-            }*/
+            }
 
         };
         return webMvcConfigurer;
