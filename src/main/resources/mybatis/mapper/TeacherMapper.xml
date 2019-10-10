@@ -39,18 +39,32 @@ cla.`name` className,dic1.`name` collName,dic2.`name` proName,teaClass.`cla_id`,
         AND teaClass.`pro_id` = stu.`pro_id` AND teaClass.`cla_id` = stu.`cla_id` AND teaClass.`stu_year` = stu.`year`
         LEFT JOIN `tbl_stu_grade` grade ON grade.`stu_id` = stu.`stu_id` AND grade.`class_id` = teaClass.`class_id`
         where teaClass.tea_id = #{teaId} and teaClass.`class_id` = #{classId}
+    </select>
 
+    <select id="existData" resultType="java.lang.Integer">
+        select count(*)
+        from `tbl_stu_grade`
+        where `stu_id` = #{stuId}
+        and `class_id` = #{classId}
     </select>
 
     <insert id="addStuGrades">
-        insert into `tbl_stu_grade`(`stu_id`,`class_id`,`grade`)
+        insert into `tbl_stu_grade` (`stu_id`,`class_id`,`grade`)
         values
-        <foreach collection="stuGrades" item="item" index="index" separator=",">
+        <foreach collection="list" item="item" separator=",">
             (
-                #{item.stuId},
-                #{item.classId},
-                #{item.grade}
+            #{item.stuId},
+            #{item.classId},
+            #{item.grade}
             )
         </foreach>
     </insert>
+
+    <update id="updateStuGrades">
+        <foreach collection="list" item="item" separator=";">
+            update `tbl_stu_grade` set
+            `grade` = #{item.grade}
+            where `stu_id` = #{item.stuId} and `class_id` = #{item.classId}
+        </foreach>
+    </update>
 </mapper>

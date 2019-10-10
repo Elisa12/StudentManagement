@@ -35,7 +35,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Integer addStuGrades(List<StuGrade> stuGrades) {
-        Integer integer = teacherMapper.addStuGrades(stuGrades);
-        return integer;
+        StuGrade stuGrade = stuGrades.get(0);
+        Integer exist = teacherMapper.existData(stuGrade);
+        if(exist == 0) {
+            Integer integer = teacherMapper.addStuGrades(stuGrades);
+            return  integer;
+        }
+        else {
+            Integer integer = teacherMapper.updateStuGrades(stuGrades);
+            return integer;
+        }
     }
 }

@@ -32,10 +32,10 @@
                 <td th:text="${item.collName}"></td>
                 <td th:text="${item.proName}"></td>
                 <td th:text="${item.claId}"></td>
-                <td><input th:name="'stuGrade['+${Stat.index}+'].grade'" style="border: none" type="text" th:value="${item.grade}"/></td>
+                <td><input autocomplete="off" lay-verify="number" th:name="'stuGrade['+${Stat.index}+'].grade'" style="border: none" type="text" th:value="${item.grade}"/></td>
             </tr>
         </table>
-        <input class="layui-btn" type="button" lay-submit lay-filter="submit" value="立即提交">
+        <input style="margin-left: 1050px" class="layui-btn" type="button" lay-submit lay-filter="submit" value="立即提交">
     </form>
 </div>
 </body>

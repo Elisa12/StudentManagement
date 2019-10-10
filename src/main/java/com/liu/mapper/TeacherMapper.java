@@ -16,5 +16,10 @@ public interface TeacherMapper {
 
     List<StudentInfoWithGrade> getTeaClassInfo(@Param("classId") Integer classId, @Param("teaId") String teaId);
 
-    Integer addStuGrades(@Param("stuGrades") List<StuGrade> stuGrades);
+
+    Integer existData(StuGrade build);
+
+    Integer addStuGrades(List<StuGrade> stuGrades);
+
+    Integer updateStuGrades(List<StuGrade> stuGrades);
 }
