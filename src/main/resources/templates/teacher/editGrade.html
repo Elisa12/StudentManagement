@@ -7,30 +7,58 @@
     <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
 </head>
 <body>
-<div class="layui-main">
-<table class="layui-table">
-    <tr>
-        <th>学号</th>
-        <th>姓名</th>
-        <th>性别</th>
-        <th>年级</th>
-        <th>学院</th>
-        <th>专业</th>
-        <th>班级</th>
-        <th>成绩</th>
-    </tr>
-    <tr th:each="item:${session.studentInfoWithGrade}">
-        <td th:text="${item.stuId}"></td>
-        <td th:text="${item.name}"></td>
-        <td th:text="${item.sex}"></td>
-        <td th:text="${item.year}"></td>
-        <td th:text="${item.collName}"></td>
-        <td th:text="${item.proName}"></td>
-        <td th:text="${item.claId}"></td>
-        <td><input style="border: none" type="text" th:value="${item.grade}"/></td>
 
-    </tr>
-</table>
+<div class="layui-main">
+    <form class="layui-form">
+        <table class="layui-table">
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年级</th>
+                <th>学院</th>
+                <th>专业</th>
+                <th>班级</th>
+                <th>成绩</th>
+            </tr>
+
+            <tr th:each="item,Stat:${session.studentInfoWithGrade}">
+                <input type="hidden" th:name="'stuGrade['+${Stat.index}+'].stuId'" th:value="${item.stuId}">
+                <input type="hidden" th:name="'stuGrade['+${Stat.index}+'].classId'" th:value="${session.classId}">
+                <td th:text="${item.stuId}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.sex}"></td>
+                <td th:text="${item.year}"></td>
+                <td th:text="${item.collName}"></td>
+                <td th:text="${item.proName}"></td>
+                <td th:text="${item.claId}"></td>
+                <td><input th:name="'stuGrade['+${Stat.index}+'].grade'" style="border: none" type="text" th:value="${item.grade}"/></td>
+            </tr>
+        </table>
+        <input class="layui-btn" type="button" lay-submit lay-filter="submit" value="立即提交">
+    </form>
 </div>
 </body>
 </html>
+<script>
+    layui.use(['jquery','form','layer'],function () {
+        var form = layui.form,
+            $ = layui.jquery;
+        form.on('submit(submit)', function (data) {
+            console.log(data.field);
+
+            $.ajax({
+                url: "/tea/stuGrades",
+                type: "post",
+                data: data.field,
+                success:function (result) {
+                    if(result.code == 200) {
+                        layer.msg("修改成功");
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+</script>

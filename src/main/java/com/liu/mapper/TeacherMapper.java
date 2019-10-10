@@ -1,5 +1,6 @@
 package com.liu.mapper;
 
+import com.liu.pojo.StuGrade;
 import com.liu.pojo.StudentInfoWithGrade;
 import com.liu.pojo.TeaClass;
 import com.liu.pojo.TeacherInfo;
@@ -14,4 +15,6 @@ public interface TeacherMapper {
     List<TeaClass> getTeaClassById(@Param("id") String nowLoginId);
 
     List<StudentInfoWithGrade> getTeaClassInfo(@Param("classId") Integer classId, @Param("teaId") String teaId);
+
+    Integer addStuGrades(@Param("stuGrades") List<StuGrade> stuGrades);
 }

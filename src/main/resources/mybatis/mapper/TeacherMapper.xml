@@ -32,13 +32,25 @@ cla.`name` className,dic1.`name` collName,dic2.`name` proName,teaClass.`cla_id`,
 
     <select id="getTeaClassInfo" resultType="com.liu.pojo.StudentInfoWithGrade">
         select stu.`stu_id`,stu.`name`,stu.`sex`,stu.`com_year`,stu.`year`,dic1.`name` collName,dic2.`name` proName,stu.`cla_id`,grade.`grade`
-from `tbl_stu` stu
-LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
-LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
-LEFT JOIN `tbl_tea_class` teaClass ON teaClass.`coll_id` = stu.`coll_id`
-AND teaClass.`pro_id` = stu.`pro_id` AND teaClass.`cla_id` = stu.`cla_id` AND teaClass.`stu_year` = stu.`year`
-LEFT JOIN `tbl_stu_grade` grade ON grade.`stu_id` = stu.`stu_id` AND grade.`class_id` = teaClass.`class_id`
-where teaClass.tea_id = #{teaId} and teaClass.`class_id` = #{classId}
+        from `tbl_stu` stu
+        LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        LEFT JOIN `tbl_tea_class` teaClass ON teaClass.`coll_id` = stu.`coll_id`
+        AND teaClass.`pro_id` = stu.`pro_id` AND teaClass.`cla_id` = stu.`cla_id` AND teaClass.`stu_year` = stu.`year`
+        LEFT JOIN `tbl_stu_grade` grade ON grade.`stu_id` = stu.`stu_id` AND grade.`class_id` = teaClass.`class_id`
+        where teaClass.tea_id = #{teaId} and teaClass.`class_id` = #{classId}
 
     </select>
+
+    <insert id="addStuGrades">
+        insert into `tbl_stu_grade`(`stu_id`,`class_id`,`grade`)
+        values
+        <foreach collection="stuGrades" item="item" index="index" separator=",">
+            (
+                #{item.stuId},
+                #{item.classId},
+                #{item.grade}
+            )
+        </foreach>
+    </insert>
 </mapper>

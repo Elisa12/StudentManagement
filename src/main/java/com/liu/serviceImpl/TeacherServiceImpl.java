@@ -1,6 +1,7 @@
 package com.liu.serviceImpl;
 
 import com.liu.mapper.TeacherMapper;
+import com.liu.pojo.StuGrade;
 import com.liu.pojo.StudentInfoWithGrade;
 import com.liu.pojo.TeaClass;
 import com.liu.pojo.TeacherInfo;
@@ -30,5 +31,11 @@ public class TeacherServiceImpl implements TeacherService {
     public List<StudentInfoWithGrade> getTeaClassInfo(Integer classId,String teaId) {
         List<StudentInfoWithGrade> studentInfoWithGrade =  teacherMapper.getTeaClassInfo(classId,teaId);
         return studentInfoWithGrade;
+    }
+
+    @Override
+    public Integer addStuGrades(List<StuGrade> stuGrades) {
+        Integer integer = teacherMapper.addStuGrades(stuGrades);
+        return integer;
     }
 }

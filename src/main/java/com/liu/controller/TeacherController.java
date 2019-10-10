@@ -3,9 +3,7 @@ package com.liu.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.liu.message.AjaxResponse;
-import com.liu.pojo.StudentInfoWithGrade;
-import com.liu.pojo.TeaClass;
-import com.liu.pojo.TeacherInfo;
+import com.liu.pojo.*;
 import com.liu.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,5 +56,14 @@ public class TeacherController {
         String teaId = (String) session.getAttribute("nowLoginId");
         List<StudentInfoWithGrade> studentInfoWithGrade = teacherService.getTeaClassInfo(classId,teaId);
         session.setAttribute("studentInfoWithGrade",studentInfoWithGrade);
+        session.setAttribute("classId",classId);
+    }
+
+    @PostMapping("/stuGrades")
+    @ResponseBody
+    public AjaxResponse addStuGrades(StuGradeModel stuGrade){
+        List<StuGrade> stuGrades = stuGrade.getStuGrade();
+        Integer integer = teacherService.addStuGrades(stuGrades);
+        return AjaxResponse.builder().code(200).status(integer).build();
     }
 }
