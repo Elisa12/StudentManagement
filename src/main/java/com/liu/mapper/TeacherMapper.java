@@ -22,4 +22,8 @@ public interface TeacherMapper {
     Integer addStuGrades(List<StuGrade> stuGrades);
 
     Integer updateStuGrades(List<StuGrade> stuGrades);
+
+    String getPasswordById(@Param("id") String id);
+
+    void editPassword(@Param("password") String newPassword,@Param("id")String id);
 }

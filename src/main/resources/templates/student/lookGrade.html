@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>查看基本信息</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{student/index::head}"></div>
+    <div th:replace="~{student/index::left}"></div>
+    <div class="layui-body">
+        <div class="layui-main">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>课程编号</th>
+                    <th>课程名称</th>
+                    <th>成绩</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${grades}">
+                        <th th:text="${item.classId}"></th>
+                        <th th:text="${item.name}"></th>
+                        <th th:text="${item.grade}"></th>
+                        <th th:text="${item.year}"></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div th:replace="~{student/index::foot}"></div>
+</div>
+</body>
+</html>

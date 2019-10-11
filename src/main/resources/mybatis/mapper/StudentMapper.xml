@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liu.mapper.StudentMapper">
+    <select id="getStuInfoById" resultType="com.liu.pojo.StudentInfo">
+        select
+        <include refid="com.liu.mapper.AdminMapper.studentInfo"/>
+        from `tbl_stu` stu
+        LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
+        LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` =
+        dic1.`val_id`
+        where stu.`stu_id` = #{id}
+    </select>
+
+    <select id="getStuGradeById" resultType="com.liu.pojo.GradeInfo">
+        SELECT
+	        g.`class_id`,c.`name`,g.`grade`,d.`year_title` AS YEAR
+        FROM
+	        `tbl_stu_grade` g
+        LEFT JOIN
+	        `tbl_class` c ON g.`class_id` = c.`id`
+        LEFT JOIN
+	        `tbl_year_dic` d ON c.`year` = d.`year_id`
+        WHERE
+	        g.`stu_id` = #{id}
+    </select>
+
+    <select id="getPasswordById" resultType="java.lang.String">
+        select password from `tbl_stu` where `stu_id` = #{id}
+    </select>
+    <update id="editPassword">
+        update `tbl_stu` set `password` = #{password} where `stu_id` = #{id}
+    </update>
+</mapper>

@@ -23,46 +23,56 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @GetMapping("/lookStudent")
+    /*跳转到查看学生信息页面*/
+    @GetMapping("/goLookStudent")
     public String goLookStudent() {
         return "/admin/lookStudent";
     }
-    @GetMapping("/editStudent")
+
+    /*跳转到编辑学生页面*/
+    @GetMapping("/goEditStudent")
     public String goEditStudent(){
         return "/admin/editStudent";
     }
-    @GetMapping("/lookTeacher")
+
+    /*跳转到查看教师信息页面*/
+    @GetMapping("/goLookTeacher")
     public String goLookTeacher() {
         return "/admin/lookTeacher";
     }
-    @GetMapping("/addTeacher")
+
+    /*跳转到添加教师页面*/
+    @GetMapping("/goAddTeacher")
     public String goAddTeacher() {
         return "/admin/addTeacher";
     }
-    @GetMapping("/addStudent")
+
+    /*跳转到添加学生页面*/
+    @GetMapping("/goAddStudent")
     public String goAddStudent() {
         return "admin/addStudent";
     }
-    @GetMapping("/editTeacher")
+
+    /*跳转到编辑教师信息页面*/
+    @GetMapping("/goEditTeacher")
     public String goEditTeacher(){
         return "admin/editTeacher";
     }
 
-
-
+    /*添加学生具体业务逻辑*/
     @PostMapping("/students")
     @ResponseBody
     public AjaxResponse addStudent(Student student) {
-
         String password = student.getCardId().substring(12);
         String year = student.getStuId().substring(0,4);
         student.setPassword(password);
         student.setYear(year);
         student.setComYear(year);
-        Integer integer = adminService.addStudent(student);
-        return AjaxResponse.builder().code(200).status(integer).build();
+        adminService.addStudent(student);
+        return AjaxResponse.builder().code(200).build();
     }
 
+    /*查找学生具体业务逻辑*/
     @GetMapping("/students")
     @ResponseBody
     public AjaxResponse getStudentByConditions(@RequestParam("page")Integer page,@RequestParam("limit")Integer limit,Student student) {
@@ -74,12 +84,14 @@ public class AdminController {
         return AjaxResponse.builder().code(200).data(students).build();
     }
 
+    /*编辑学生信息时，需要将回显的信息预先存到session中*/
     @PostMapping("/setEditStudentInfo")
     @ResponseBody
     public void setEditStudentInfo(StudentInfo studentInfo, HttpSession session) {
         session.setAttribute("editStudentInfo",studentInfo);
     }
 
+    /*获取之前存到session中的信息*/
     @GetMapping("/getEditStudentInfo")
     @ResponseBody
     public AjaxResponse getEditStudentInfo(HttpSession session) {
@@ -87,6 +99,7 @@ public class AdminController {
         return AjaxResponse.builder().code(200).studentInfo(editStudentInfo).build();
     }
 
+    /*修改学生信息*/
     @PutMapping("/students")
     @ResponseBody
     public AjaxResponse editStudent(Student student) {
@@ -94,6 +107,7 @@ public class AdminController {
         return AjaxResponse.builder().code(200).build();
     }
 
+    /*获取教师信息*/
     @GetMapping("/teachers")
     @ResponseBody
     public AjaxResponse getTeacherByConditions(@RequestParam("page")Integer page, @RequestParam("limit")Integer limit, Teacher teacher) {
@@ -105,6 +119,7 @@ public class AdminController {
         return AjaxResponse.builder().code(200).data(teachers).build();
     }
 
+    /*添加教师信息*/
     @PostMapping("/teachers")
     @ResponseBody
     public AjaxResponse  addTeacher(Teacher teacher) {
@@ -112,16 +127,17 @@ public class AdminController {
         teacher.setPassword(password);
         String year = teacher.getTeaId().substring(0,4);
         teacher.setYear(year);
-        Integer integer = adminService.addTeacher(teacher);
+        adminService.addTeacher(teacher);
         return AjaxResponse.builder().code(200).build();
     }
 
+    /*编辑教师信息前，需要将信息预先存到session*/
     @PostMapping("/setEditTeacherInfo")
     @ResponseBody
     public void setEditTeacherInfo(TeacherInfo teacherInfo, HttpSession session) {
         session.setAttribute("editTeacherInfo",teacherInfo);
     }
-
+    /*编辑页面发送该请求获取到session中的信息*/
     @GetMapping("/getEditTeacherInfo")
     @ResponseBody
     public AjaxResponse getEditTeacherInfo(HttpSession session) {
@@ -129,7 +145,7 @@ public class AdminController {
         return AjaxResponse.builder().code(200).teacherInfo(editTeacherInfo).build();
     }
 
-
+    /*修改教师信息*/
     @PutMapping("/teachers")
     @ResponseBody
     public AjaxResponse editTeacher(Teacher teacher) {

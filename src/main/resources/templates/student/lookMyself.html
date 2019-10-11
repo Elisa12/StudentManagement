@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>查看基本信息</title>
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.5.5/css/layui.css"/>
+    <script src="https://www.layuicdn.com/layui-v2.5.5/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="~{teacher/index::head}"></div>
+    <div th:replace="~{teacher/index::left}"></div>
+    <div class="layui-body">
+        <div class="layui-main">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>入学年份</th>
+                    <th>年级</th>
+                    <th>政治面貌</th>
+                    <th>学院</th>
+                    <th>专业</th>
+                    <th>班级</th>
+                    <th>身份证号</th>
+                    <th>银行账号</th>
+                    <th>家庭住址</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th th:text="${stuInfo.stuId}"></th>
+                    <th th:text="${stuInfo.name}"></th>
+                    <th th:text="${stuInfo.sex}"></th>
+                    <th th:text="${stuInfo.comYear}"></th>
+                    <th th:text="${stuInfo.year}"></th>
+                    <th th:text="${stuInfo.politicalStatus}"></th>
+                    <th th:text="${stuInfo.collName}"></th>
+                    <th th:text="${stuInfo.proName}"></th>
+                    <th th:text="${stuInfo.claId}"></th>
+                    <th th:text="${stuInfo.cardId}"></th>
+                    <th th:text="${stuInfo.bankCard}"></th>
+                    <th th:text="${stuInfo.address}"></th>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div th:replace="~{teacher/index::foot}"></div>
+</div>
+</body>
+</html>

@@ -1,9 +1,6 @@
 package com.liu.service;
 
-import com.liu.pojo.StuGrade;
-import com.liu.pojo.StudentInfoWithGrade;
-import com.liu.pojo.TeaClass;
-import com.liu.pojo.TeacherInfo;
+import com.liu.pojo.*;
 
 import java.util.List;
 
@@ -16,4 +13,6 @@ public interface TeacherService {
     List<StudentInfoWithGrade> getTeaClassInfo(Integer classId,String teaId);
 
     Integer addStuGrades(List<StuGrade> stuGrades);
+
+    boolean editPassword(EditPassword editPassword,String id);
 }

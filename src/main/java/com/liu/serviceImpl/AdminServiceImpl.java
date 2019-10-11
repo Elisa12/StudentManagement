@@ -16,9 +16,8 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminMapper adminMapper;
     @Override
-    public Integer addStudent(Student student) {
-        Integer integer = adminMapper.addStudent(student);
-        return integer;
+    public void addStudent(Student student) {
+        adminMapper.addStudent(student);
     }
 
     @Override
@@ -39,9 +38,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Integer addTeacher(Teacher teacher) {
-        Integer integer = adminMapper.addTeacher(teacher);
-        return integer;
+    public void addTeacher(Teacher teacher) {
+        adminMapper.addTeacher(teacher);
     }
 
     @Override

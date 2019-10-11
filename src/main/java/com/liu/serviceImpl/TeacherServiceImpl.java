@@ -1,10 +1,7 @@
 package com.liu.serviceImpl;
 
 import com.liu.mapper.TeacherMapper;
-import com.liu.pojo.StuGrade;
-import com.liu.pojo.StudentInfoWithGrade;
-import com.liu.pojo.TeaClass;
-import com.liu.pojo.TeacherInfo;
+import com.liu.pojo.*;
 import com.liu.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +41,17 @@ public class TeacherServiceImpl implements TeacherService {
         else {
             Integer integer = teacherMapper.updateStuGrades(stuGrades);
             return integer;
+        }
+    }
+
+    @Override
+    public boolean editPassword(EditPassword editPassword,String id) {
+        if(editPassword.getPassword().equals(teacherMapper.getPasswordById(id))) {
+            teacherMapper.editPassword(editPassword.getNewPassword(),id);
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }

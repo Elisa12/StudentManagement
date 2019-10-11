@@ -8,7 +8,7 @@ import com.liu.pojo.TeacherInfo;
 import java.util.List;
 
 public interface AdminService {
-    Integer addStudent(Student student);
+    void addStudent(Student student);
 
     void editStudent(Student student);
 
@@ -16,7 +16,7 @@ public interface AdminService {
 
     List<TeacherInfo> getTeacherByConditions(Teacher teacher);
 
-    Integer addTeacher(Teacher teacher);
+    void addTeacher(Teacher teacher);
 
     void editTeacher(Teacher teacher);
 }

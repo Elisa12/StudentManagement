@@ -45,8 +45,6 @@
         var form = layui.form,
             $ = layui.jquery;
         form.on('submit(submit)', function (data) {
-            console.log(data.field);
-
             $.ajax({
                 url: "/tea/stuGrades",
                 type: "post",

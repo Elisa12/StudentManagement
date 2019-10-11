@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     @Autowired
     private LoginService loginService;
+
+    /*登录前检查数据库是否有匹配数据，无则返回错误，有则跳转到与身份对应的主页，并在session中存储登录信息*/
     @PostMapping("/login")
     @ResponseBody
     public AjaxResponse login(String id, String password, HttpSession session) {
@@ -39,6 +41,7 @@ public class LoginController {
         }
     }
 
+    /*同上*/
     @GetMapping("/goView")
     public String goView(HttpSession session) {
         String  nowLogin = (String) session.getAttribute("nowLogin");
@@ -51,6 +54,8 @@ public class LoginController {
         else
             return "redirect:/index.html";
     }
+
+    /*登出，销毁session，返回登录页面*/
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

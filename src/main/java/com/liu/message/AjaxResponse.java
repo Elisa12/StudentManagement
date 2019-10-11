@@ -14,7 +14,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class AjaxResponse {
     private Integer code;
-    private Integer status;
     private String message;
     private StudentInfo studentInfo;
     private TeacherInfo teacherInfo;
