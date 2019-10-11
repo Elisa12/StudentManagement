@@ -40,6 +40,11 @@ public class StudentController {
         return "/student/lookGrade";
     }
 
+    @GetMapping("/goEditPassword")
+    public String goEditPassword() {
+        return "/student/editPassword";
+    }
+
     /*修改密码具体逻辑*/
     @PutMapping("/passwords")
     @ResponseBody
