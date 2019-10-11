@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80016
 File Encoding         : 65001
 
-Date: 2019-10-11 12:37:08
+Date: 2019-10-11 18:06:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -307,7 +307,7 @@ CREATE TABLE `tbl_tea` (
 -- ----------------------------
 -- Records of tbl_tea
 -- ----------------------------
-INSERT INTO `tbl_tea` VALUES ('1', 'admin', '讲师', '男', '2', '2', '讲师', '52435000l.AG', '420922199805127716', '2016');
+INSERT INTO `tbl_tea` VALUES ('1', 'admin', '讲师', '男', '2', '2', '教授', '123456', '420922199805127716', '2016');
 INSERT INTO `tbl_tea` VALUES ('2', 'admin1', 'test1', '男', '2', '2', '讲师', '123456', null, '2016');
 INSERT INTO `tbl_tea` VALUES ('3', 'admin2', 'test2', null, '2', '2', '讲师', '123456', null, '2016');
 INSERT INTO `tbl_tea` VALUES ('4', 'admin3', 'test3', null, '2', '2', '讲师', '123456', null, '2016');
