@@ -26,25 +26,25 @@ public class AdminController {
     /*跳转到查看学生信息页面*/
     @GetMapping("/goLookStudent")
     public String goLookStudent() {
-        return "/admin/lookStudent";
+        return "admin/lookStudent";
     }
 
     /*跳转到编辑学生页面*/
     @GetMapping("/goEditStudent")
     public String goEditStudent(){
-        return "/admin/editStudent";
+        return "admin/editStudent";
     }
 
     /*跳转到查看教师信息页面*/
     @GetMapping("/goLookTeacher")
     public String goLookTeacher() {
-        return "/admin/lookTeacher";
+        return "admin/lookTeacher";
     }
 
     /*跳转到添加教师页面*/
     @GetMapping("/goAddTeacher")
     public String goAddTeacher() {
-        return "/admin/addTeacher";
+        return "admin/addTeacher";
     }
 
     /*跳转到添加学生页面*/

@@ -42,7 +42,7 @@ public class StudentController {
 
     @GetMapping("/goEditPassword")
     public String goEditPassword() {
-        return "/student/editPassword";
+        return "student/editPassword";
     }
 
     /*修改密码具体逻辑*/

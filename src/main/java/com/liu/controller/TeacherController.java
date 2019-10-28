@@ -32,7 +32,7 @@ public class TeacherController {
     /*跳转到课程信息页面*/
     @GetMapping("/goLookClass")
     public String goLookClass(){
-        return "/teacher/lookClass";
+        return "teacher/lookClass";
     }
 
     /*获取登录教师教过得所有课的信息*/
@@ -50,7 +50,7 @@ public class TeacherController {
     /*跳转到录入成绩页面*/
     @GetMapping("/goEditGrade")
     public String goEditGrade() {
-        return "/teacher/editGrade";
+        return "teacher/editGrade";
     }
 
     /*点击录入成绩按钮发送该请求，目的是将该班级和课程成绩信息一起存入session，供editGrade.html取用*/
@@ -76,7 +76,7 @@ public class TeacherController {
     /*跳转到修改密码页面*/
     @GetMapping("/goEditPassword")
     public String goEditPassword() {
-        return "/teacher/editPassword";
+        return "teacher/editPassword";
     }
 
     /*修改密码具体逻辑*/
