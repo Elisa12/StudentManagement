@@ -9,7 +9,6 @@ spring:
 mybatis:
   config-location: classpath:/mybatis/mybatis_config.xml
   mapper-locations: classpath:/mybatis/mapper/*.xml
-  executor-type: batch
 pagehelper:
   helper-dialect: mysql
   reasonable: true

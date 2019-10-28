@@ -4,12 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liu.mapper.StudentMapper">
     <select id="getStuInfoById" resultType="com.liu.pojo.StudentInfo">
-        select
-        <include refid="com.liu.mapper.AdminMapper.studentInfo"/>
-        from `tbl_stu` stu
-        LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
-        LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` =
-        dic1.`val_id`
+        select * from stu_detail
         where stu.`stu_id` = #{id}
     </select>
 

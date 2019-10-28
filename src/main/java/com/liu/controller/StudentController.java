@@ -37,7 +37,7 @@ public class StudentController {
         String  nowLoginId = (String) session.getAttribute("nowLoginId");
         List<GradeInfo> grades =  studentService.getStuGradeById(nowLoginId);
         model.addAttribute("grades",grades);
-        return "/student/lookGrade";
+        return "student/lookGrade";
     }
 
     @GetMapping("/goEditPassword")

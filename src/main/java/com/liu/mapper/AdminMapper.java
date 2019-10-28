@@ -8,15 +8,15 @@ import com.liu.pojo.TeacherInfo;
 import java.util.List;
 
 public interface AdminMapper {
-    Integer addStudent(Student student);
+    void addStudent(Student student);
 
-    Integer editStudent(Student student);
+    void editStudent(Student student);
 
     List<StudentInfo> getStudentByConditions(Student student);
 
     List<TeacherInfo> getTeacherByConditions(Teacher teacher);
 
-    Integer addTeacher(Teacher teacher);
+    void addTeacher(Teacher teacher);
 
-    Integer editTeacher(Teacher teacher);
+    void editTeacher(Teacher teacher);
 }

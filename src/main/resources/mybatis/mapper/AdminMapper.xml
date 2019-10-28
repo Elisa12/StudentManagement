@@ -3,24 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liu.mapper.AdminMapper">
-    <sql id="studentInfo">
-        stu.`stu_id`,stu.`name`,stu.`sex`,stu.`com_year`,stu.`year`,
-        dic1.`name` collName ,dic2.`name` proName,
-        stu.`cla_id`,stu.`card_id`,stu.`address`,stu.`political_status`,stu.`bank_card`
-    </sql>
-    <sql id="teacherInfo">
-        tea.`tea_id`,tea.`name`,tea.`sex`,dic1.`name` collName,dic2.`name` proName,tea.`pro_title`,tea.`year`,tea.`card_id`
-    </sql>
     <insert id="addStudent">
         insert into tbl_stu(stu_id,name,sex,coll_id,pro_id,cla_id,card_id,password,com_year,year,address,political_status,bank_card)
         values(#{stuId},#{name},#{sex},#{collId},#{proId},#{claId},#{cardId},#{password},#{comYear},#{year},#{address},#{politicalStatus},#{bankCard})
     </insert>
-
     <select id="getStudentByConditions" resultType="com.liu.pojo.StudentInfo">
-        select <include refid="studentInfo" />
-        from `tbl_stu` stu
-        LEFT JOIN `tbl_dic_2016` dic1 ON stu.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
-        LEFT JOIN `tbl_dic_2016` dic2 ON stu.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        select * from stu_detail
         <where>
             <if test="stuId != ''">
                 and stu.`stu_id` = #{stuId}
@@ -61,14 +49,10 @@
         `political_status` = #{politicalStatus},
         `bank_card` = #{bankCard}
         where `stu_id` = #{stuId}
-
     </update>
 
     <select id="getTeacherByConditions" resultType="com.liu.pojo.TeacherInfo">
-        select <include refid="teacherInfo"></include>
-        from `tbl_tea` tea
-        LEFT JOIN `tbl_dic_2016` dic1 ON tea.`coll_id` = dic1.`val_id` AND dic1.`type` = 'col'
-        LEFT JOIN `tbl_dic_2016` dic2 ON tea.`pro_id` = dic2.`val_id` and dic2.`type` = 'pro' AND dic2.`par_id` = dic1.`val_id`
+        select * from tea_detail
         <where>
             <if test="teaId != ''">
                 and tea.`tea_id` = #{teaId}
